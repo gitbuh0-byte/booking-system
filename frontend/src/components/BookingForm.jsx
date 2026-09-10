@@ -74,10 +74,19 @@ export default function BookingForm({ bookings, onBooked }) {
         };
       }
 
+      if (field === 'bus_id') {
+        const selectedRoute = BUSES.find((bus) => bus.id === value) ?? BUSES[0];
+        return {
+          ...current,
+          bus_id: value,
+          fleet_id: selectedRoute.fleetId,
+          seat_number: '',
+        };
+      }
+
       return {
         ...current,
         [field]: value,
-        ...(field === 'bus_id' ? { seat_number: '' } : {}),
       };
     });
   }
@@ -224,7 +233,7 @@ export default function BookingForm({ bookings, onBooked }) {
       <label className="field">
         <span>Bus route</span>
         <select value={form.bus_id} onChange={(event) => update('bus_id', event.target.value)}>
-          {BUSES.filter((bus) => bus.fleetId === form.fleet_id).map((bus) => {
+          {BUSES.map((bus) => {
             return <option key={bus.id} value={bus.id}>{bus.label}</option>;
           })}
         </select>
