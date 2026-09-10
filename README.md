@@ -1,7 +1,7 @@
 # Booking desk
 
 A small full-stack Kenyan bus seat booking system. Choose a route, select an
-available passenger seat, and reserve it for a boarding-to-arrival time range.
+available passenger seat, and reserve it on one of three fixed fleet schedules.
 Routes include Nairobi-Mombasa, Nairobi-Kisumu, Nairobi-Nakuru,
 Nairobi-Eldoret, Nairobi-Malindi, and Nairobi-Nanyuki.
 
@@ -45,7 +45,7 @@ npm run dev
 ```
 
 `npm run migrate` applies the seat schema and the database-level overlap
-constraint. A successful health check reports `database: "configured"`.
+constraint. A successful health check reports `database: "connected"`.
 
 The API runs at `http://localhost:8080`. Check it with:
 
@@ -65,6 +65,11 @@ Open `http://localhost:5173`, choose a Kenyan route and passenger seat, then cre
 remove bookings directly in the app. The driver's seat is never selectable;
 each bus has 34 passenger seats.
 
+### Live route panel
+
+The app shows live route status and an Open in Google Maps directions link
+without requiring any API key.
+
 ## API
 
 | Method | Path | Auth | Purpose |
@@ -74,6 +79,9 @@ each bus has 34 passenger seats.
 | GET | `/api/bookings?bus_id=bus-101` | None | Filter by bus |
 | POST | `/api/bookings` | None | Create a booking |
 | DELETE | `/api/bookings/:id` | None | Remove a booking |
+
+Each route has a fixed boarding and arrival time returned by `/api/buses`;
+passengers choose the travel date and seat, not custom times.
 
 Create a booking with ISO 8601 timestamps:
 
