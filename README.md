@@ -1,4 +1,4 @@
-# Booking desk
+# My bus booking system
 
 A small full-stack Kenyan bus seat booking system. Choose a route, select an
 available passenger seat, and reserve it on one of three fixed fleet schedules.
@@ -9,7 +9,7 @@ Nairobi-Eldoret, Nairobi-Malindi, and Nairobi-Nanyuki.
 
 - React and Vite frontend
 - Node.js and Express API
-- PostgreSQL with a GiST exclusion constraint for overlap protection
+- PostgreSQL (supabase) with a GiST exclusion constraint for overlap protection
 
 ## Run locally
 
@@ -61,14 +61,9 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:5173`, choose a Kenyan route and passenger seat, then create or
+Open `http://localhost:5173`, choose a route and passenger seat, then create or
 remove bookings directly in the app. The driver's seat is never selectable;
 each bus has 34 passenger seats.
-
-### Live route panel
-
-The app shows live route status and an Open in Google Maps directions link
-without requiring any API key.
 
 ## API
 
@@ -83,26 +78,9 @@ without requiring any API key.
 Each route has a fixed boarding and arrival time returned by `/api/buses`;
 passengers choose the travel date and seat, not custom times.
 
-Create a booking with ISO 8601 timestamps:
-
-```json
-{
-  "bus_id": "bus-101",
-  "seat_number": "7",
-  "starts_at": "2026-09-10T09:00:00Z",
-  "ends_at": "2026-09-10T10:00:00Z",
-  "booked_by": "jane@example.com"
-}
-```
-
-An overlapping request for the same bus and seat returns `409 Conflict`. The
-API performs a friendly range check inside a transaction, and PostgreSQL's
-`no_overlapping_bookings` exclusion constraint is the final guard against
-concurrent writes.
-
 ## Deployment
 
-Deploy `backend` as a Node service on Render or Railway and set `DATABASE_URL`,
+Deploy `backend` as a Node service on Render and set `DATABASE_URL`,
 `CORS_ORIGIN`, and the platform-provided `PORT`. Run the migration
 once against the production database. Deploy `frontend` as a Vite site on
-Vercel or Netlify with `VITE_API_URL` set to the backend URL.
+Render with `VITE_API_URL` set to the backend URL.
